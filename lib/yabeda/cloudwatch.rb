@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "cloudwatch/version"
+require 'yabeda'
+require 'yabeda/cloudwatch/version'
+require 'yabeda/cloudwatch/adapter'
 
 module Yabeda
   module Cloudwatch

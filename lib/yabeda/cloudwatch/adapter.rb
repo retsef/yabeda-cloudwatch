@@ -1,72 +1,73 @@
 # frozen_string_literal: true
 
-require "yabeda/base_adapter"
+require 'yabeda/base_adapter'
 
 module Yabeda
-  module CloudWatch
-    class Adapter < ::Yabeda::BaseAdapter
-      attr_reader :connection
+  # Yabeda AWS Cloudwatch adapter
+  class Cloudwatch::Adapter < BaseAdapter
+    attr_reader :connection
 
-      def initialize(connection:)
-        @connection = connection
-      end
+    def initialize(connection:)
+      super()
 
-      def register_counter!(counter)
-        # We don't need to register metric
-      end
+      @connection = connection
+    end
 
-      def perform_counter_increment!(counter, tags, increment)
-        connection.put_metric_data(
-          namespace: counter.group,
-          metric_data: [
-            {
-              metric_name: counter.name.to_s,
-              timestamp: Time.now,
-              dimensions: tags.map {|tag_name, tag_value| {name: tag_name, value: tag_value}},
-              unit: counter.unit || 'Count',
-              value: increment
-            }
-          ]
-        )
-      end
+    def register_counter!(counter)
+      # We don't need to register metric
+    end
 
-      def register_gauge!(gauge)
-        # We don't need to register metric
-      end
+    def perform_counter_increment!(counter, tags, increment)
+      connection.put_metric_data(
+        namespace: counter.group,
+        metric_data: [
+          {
+            metric_name: counter.name.to_s,
+            timestamp: Time.now,
+            dimensions: tags.map { |tag_name, tag_value| { name: tag_name, value: tag_value } },
+            unit: counter.unit || 'Count',
+            value: increment,
+          },
+        ],
+      )
+    end
 
-      def perform_gauge_set!(gauge, tags, value)
-        connection.put_metric_data(
-          namespace: gauge.group,
-          metric_data: [
-            {
-              metric_name: gauge.name.to_s,
-              timestamp: Time.now,
-              dimensions: tags.map {|tag_name, tag_value| {name: tag_name, value: tag_value}},
-              unit: gauge.unit || 'Count',
-              value: value
-            }
-          ]
-        )
-      end
+    def register_gauge!(gauge)
+      # We don't need to register metric
+    end
 
-      def register_histogram!(histogram)
-        # We don't need to register metric
-      end
+    def perform_gauge_set!(gauge, tags, value)
+      connection.put_metric_data(
+        namespace: gauge.group,
+        metric_data: [
+          {
+            metric_name: gauge.name.to_s,
+            timestamp: Time.now,
+            dimensions: tags.map { |tag_name, tag_value| { name: tag_name, value: tag_value } },
+            unit: gauge.unit || 'Count',
+            value: value,
+          },
+        ],
+      )
+    end
 
-      def perform_histogram_measure!(histogram, tags, value)
-        connection.put_metric_data(
-          namespace: histogram.group,
-          metric_data: [
-            {
-              metric_name: histogram.name.to_s,
-              timestamp: Time.now,
-              dimensions: tags.map {|tag_name, tag_value| {name: tag_name, value: tag_value}},
-              unit: histogram.unit || 'Seconds',
-              value: value
-            }
-          ]
-        )
-      end
+    def register_histogram!(histogram)
+      # We don't need to register metric
+    end
+
+    def perform_histogram_measure!(histogram, tags, value)
+      connection.put_metric_data(
+        namespace: histogram.group,
+        metric_data: [
+          {
+            metric_name: histogram.name.to_s,
+            timestamp: Time.now,
+            dimensions: tags.map { |tag_name, tag_value| { name: tag_name, value: tag_value } },
+            unit: histogram.unit || 'Seconds',
+            value: value,
+          },
+        ],
+      )
     end
   end
 end

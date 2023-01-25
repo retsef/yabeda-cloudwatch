@@ -10,11 +10,8 @@ Metrics/BlockLength:
     - "Gemfile"
     - "spec/**/*"
 
-Style/BracesAroundHashParameters:
-  EnforcedStyle: context_dependent
-
-Style/StringLiterals:
-  EnforcedStyle: double_quotes
+Metrics/MethodLength:
+  Max: 25
 
 # Allow to use let!
 RSpec/LetSetup:
@@ -24,6 +21,9 @@ RSpec/MultipleExpectations:
   Enabled: false
 
 Bundler/OrderedGems:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
   Enabled: false
 
 Style/TrailingCommaInArguments:

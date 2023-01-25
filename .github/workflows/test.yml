@@ -20,7 +20,6 @@ jobs:
           - ruby: 3.0
           - ruby: 2.7
           - ruby: 2.6
-          - ruby: 2.5
     container:
       image: ruby:${{ matrix.ruby }}
       env:
