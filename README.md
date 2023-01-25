@@ -60,7 +60,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/yabeda
 
    ```sh
    git add lib/yabeda/cloudwatch/version.rb CHANGELOG.md
-   version=$(ruby -r ./lib/yabeda/cloudwatch/version.rb -e "puts Gem::Version.new(Yabeda::Prometheus::VERSION)")
+   version=$(ruby -r ./lib/yabeda/cloudwatch/version.rb -e "puts Gem::Version.new(Yabeda::Cloudwatch::VERSION)")
    git commit --message="${version}: " --edit
    ```
 
