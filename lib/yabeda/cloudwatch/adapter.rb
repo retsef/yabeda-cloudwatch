@@ -11,7 +11,7 @@ module Yabeda
         @connection = connection
       end
 
-      def register_counter!(_)
+      def register_counter!(counter)
         # We don't need to register metric
       end
 
@@ -23,14 +23,14 @@ module Yabeda
               metric_name: counter.name.to_s,
               timestamp: Time.now,
               dimensions: tags.map {|tag_name, tag_value| {name: tag_name, value: tag_value}},
-              unit: counter.unit,
+              unit: counter.unit || 'Count',
               value: increment
             }
           ]
         )
       end
 
-      def register_gauge!(_)
+      def register_gauge!(gauge)
         # We don't need to register metric
       end
 
@@ -42,26 +42,26 @@ module Yabeda
               metric_name: gauge.name.to_s,
               timestamp: Time.now,
               dimensions: tags.map {|tag_name, tag_value| {name: tag_name, value: tag_value}},
-              unit: gauge.unit,
+              unit: gauge.unit || 'Count',
               value: value
             }
           ]
         )
       end
 
-      def register_histogram!(_)
+      def register_histogram!(histogram)
         # We don't need to register metric
       end
 
-      def perform_histogram_measure!(historam, tags, value)
+      def perform_histogram_measure!(histogram, tags, value)
         connection.put_metric_data(
-          namespace: counter.group,
+          namespace: histogram.group,
           metric_data: [
             {
-              metric_name: counter.name.to_s,
+              metric_name: histogram.name.to_s,
               timestamp: Time.now,
               dimensions: tags.map {|tag_name, tag_value| {name: tag_name, value: tag_value}},
-              unit: historam.unit,
+              unit: histogram.unit || 'Seconds',
               value: value
             }
           ]
