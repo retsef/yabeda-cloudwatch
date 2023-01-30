@@ -26,7 +26,6 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.3'
 
   spec.add_dependency 'aws-sdk-cloudwatch'
-  spec.add_dependency 'rack'
   spec.add_dependency 'yabeda', '~> 0.10'
 
   spec.add_development_dependency 'bundler', '~> 2.0'

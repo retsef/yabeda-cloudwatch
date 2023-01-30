@@ -21,7 +21,7 @@ And then execute:
 Add adapter to existing Yabeda config
 
 ```ruby
-client = Aws::Cloudwatch::Client.new(
+client = Aws::CloudWatch::Client.new(
   credentials: Aws::Credentials.new("project_access_key_id", "project_secret_access_key"),
   region: 'eu-west-1'
 )
