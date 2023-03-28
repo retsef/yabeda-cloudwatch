@@ -236,9 +236,7 @@ RSpec.describe Yabeda::Cloudwatch do
       # rubocop:disable Style/TrailingCommaInArguments
       before do
         Yabeda.register_adapter(:cloudwatch,
-                                Yabeda::Cloudwatch::Adapter.new(connection: aws_client,
-                                                                bulk: true,
-                                                                bulk_interval: 5))
+                                Yabeda::Cloudwatch::Adapter.new(connection: aws_client, auto_flush_interval: 2))
       end
       # rubocop:enable Style/TrailingCommaInArguments
 
@@ -247,7 +245,7 @@ RSpec.describe Yabeda::Cloudwatch do
         Yabeda.test.gauge.set({ gtag: 'gtag-value' }, 42)
         Yabeda.test.histogram.measure({ htag: 'htag-value' }, 7.5)
 
-        sleep 6
+        sleep 3
         expect(aws_client).to have_received(:put_metric_data).once
       end
     end

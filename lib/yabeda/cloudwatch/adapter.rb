@@ -6,13 +6,13 @@ require 'yabeda/cloudwatch/bulk_metrics'
 module Yabeda
   # Yabeda AWS Cloudwatch adapter
   class Cloudwatch::Adapter < BaseAdapter
-    attr_reader :connection, :bulk_connection
+    attr_reader :connection, :client
 
-    def initialize(connection:, bulk: false, bulk_interval: 5)
+    def initialize(connection:, auto_flush: true, auto_flush_interval: 0)
       super()
 
-      @connection = connection
-      @bulk_connection = Cloudwatch::BulkMetrics.new(@connection, interval: bulk_interval) if bulk
+      @client = connection
+      @connection = Cloudwatch::BulkMetrics.new(@client, auto_flush: auto_flush, interval: auto_flush_interval)
     end
 
     def register_counter!(counter)
@@ -20,7 +20,7 @@ module Yabeda
     end
 
     def perform_counter_increment!(counter, tags, increment)
-      _connection.put_metric_data(
+      connection.put_metric_data(
         namespace: counter.group.to_s,
         metric_data: [
           {
@@ -39,7 +39,7 @@ module Yabeda
     end
 
     def perform_gauge_set!(gauge, tags, value)
-      _connection.put_metric_data(
+      connection.put_metric_data(
         namespace: gauge.group.to_s,
         metric_data: [
           {
@@ -58,7 +58,7 @@ module Yabeda
     end
 
     def perform_histogram_measure!(histogram, tags, value)
-      _connection.put_metric_data(
+      connection.put_metric_data(
         namespace: histogram.group.to_s,
         metric_data: [
           {
@@ -72,10 +72,8 @@ module Yabeda
       )
     end
 
-    private
-
-    def _connection
-      bulk_connection || connection
+    def flush
+      @connection.flush
     end
   end
 end
