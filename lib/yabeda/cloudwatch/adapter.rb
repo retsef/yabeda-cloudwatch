@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 
 require 'yabeda/base_adapter'
+require 'yabeda/cloudwatch/bulk_metrics'
 
 module Yabeda
   # Yabeda AWS Cloudwatch adapter
   class Cloudwatch::Adapter < BaseAdapter
-    attr_reader :connection
+    attr_reader :connection, :client
 
-    def initialize(connection:)
+    def initialize(connection:, auto_flush: true, auto_flush_interval: 0)
       super()
 
-      @connection = connection
+      @client = connection
+      @connection = Cloudwatch::BulkMetrics.new(@client, auto_flush: auto_flush, interval: auto_flush_interval)
     end
 
     def register_counter!(counter)
@@ -68,6 +70,10 @@ module Yabeda
           },
         ],
       )
+    end
+
+    def flush
+      @connection.flush
     end
   end
 end
