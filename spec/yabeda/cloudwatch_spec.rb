@@ -248,6 +248,15 @@ RSpec.describe Yabeda::Cloudwatch do
         sleep 3
         expect(aws_client).to have_received(:put_metric_data).once
       end
+
+      specify 'send in bulk metrics to cloudwatch in bulk of 1000 maximum' do
+        1300.times do
+          Yabeda.test.histogram.measure({ htag: 'htag-value' }, 7.5)
+        end
+
+        sleep 5
+        expect(aws_client).to have_received(:put_metric_data).twice
+      end
     end
   end
 end
